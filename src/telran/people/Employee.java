@@ -1,6 +1,6 @@
-package telran.person;
+package telran.people;
 
-public class Employee extends Person {
+public class Employee extends Person  {
 private int basicSalary;
 public Employee(long id,int birthYear,String email,int basicSalary){
 	super(id,birthYear,email);

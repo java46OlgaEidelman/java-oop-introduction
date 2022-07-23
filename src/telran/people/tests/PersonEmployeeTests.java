@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import telran.person.Employee;
-import telran.person.Person;
-import telran.person.SalesPerson;
-import telran.person.WageEmployee;
+import telran.people.Employee;
+import telran.people.Person;
+import telran.people.SalesPerson;
+import telran.people.WageEmployee;
 
 class PersonEmployeeTests {
 
