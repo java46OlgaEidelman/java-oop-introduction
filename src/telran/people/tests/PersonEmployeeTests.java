@@ -91,5 +91,79 @@ class PersonEmployeeTests {
 		salesPerson.setPercentPay(ANOTHER_PERCENT_PAY);
 		assertEquals(ANOTHER_SALES_PERSON_SALARY, salesPerson.computePay());
 	}
+	@Test
+	void wrongBirthYearTest() {
+		boolean flException = false;
+	    try {
+			 new SalesPerson(123, 2018, "sp@.com", 1000, 100, 50);
+			 fail ("Sould be thrown exception");
+		} catch (IllegalArgumentException e) {
+			flException = true;
+			System.out.println(e.getMessage());
+		}	
+		assertTrue(flException);
+		try {
+			new Employee(100, 1913, ANOTHER_EMAIL, BASIC_SALARY);
+		}catch (IllegalArgumentException e) {
+			flException = true;
+			System.out.println(e.getMessage());
+	}
 
+	}
+	@Test
+	void emailCheck() {
+		Person person = new Person(0, 0, null);
+		person.setEmail("abc-d@mail.com");
+		person.setEmail("abc.def@mail.com");
+		person.setEmail("abc@mail.com");
+		person.setEmail("abc_def@mail.com");
+		person.setEmail("tel-ran@tel-ran.co.il");
+		checkMailException(person, "abc-@mail.com");
+		checkMailException(person, "abc..def@mail.com");
+		checkMailException(person, ".abc@mail.com");
+		checkMailException(person, "abc#def@mail.com");
+		checkMailException(person, "abc.def@mail.c");
+		checkMailException(person, "abc.def@mail#archive.com");
+		checkMailException(person, "abc.def@mail");
+		checkMailException(person, "abc.def@mail..com");
+
+	}
+	private void checkMailException(Person person, String email) {
+		boolean flException = false;
+		try {
+			person.setEmail(email);
+			
+		}catch(IllegalArgumentException e) {
+			flException = true;
+			System.out.println(e.getMessage());
+		}
+		assertTrue(flException);
+		
+	}
+
+	@Test
+	void wrongBasicSalaryTest() {
+		Employee empl = new Employee(11, 1970, "olya451208@mail.com", BASIC_SALARY);
+        boolean flException = false;
+		try {
+			empl.setBasicSalary(0);
+		}catch(IllegalArgumentException e) {
+			flException = true;
+			System.out.println(e.getMessage());
+		}
+		assertTrue(flException);
+	}
+	@Test
+	void wrongPercentPay() {
+		SalesPerson sp = new SalesPerson(111, BIRTH_YEAR, EMAIL, BASIC_SALARY, SALES, PERCENT_PAY);
+		boolean flException = false;
+		try {
+		sp.setPercentPay(110);
+	}catch(IllegalArgumentException e) {
+			flException = true;
+			System.out.println(e.getMessage());
+		}
+		assertTrue(flException);
+	}
+	
 }
