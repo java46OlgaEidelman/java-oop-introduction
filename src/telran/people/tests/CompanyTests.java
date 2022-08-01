@@ -2,6 +2,10 @@ package telran.people.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +28,8 @@ class CompanyTests {
 	private static final int BIRTH_YEAR3 = 2000;
 	private static final String EMAIL3 = "empl3@gmail.com";
 	private static final Integer COMPANY_SIZE = 3;
-	private static final int N_RUNS = 1000000;
-	private static final int N_EMPLOYEES = 10000;
+	private static final int N_RUNS = 10000;
+	private static final int N_EMPLOYEES = 1000;
 	ICompany company;
 	Employee empl1 = new WageEmployee(ID1, BIRTH_YEAR1, EMAIL1, BASIC_SALARY, WAGE, HOURS1);
 	Employee empl2 = new SalesPerson(ID2, BIRTH_YEAR2, EMAIL2, BASIC_SALARY, SALES, PERCENT_PAY);
@@ -36,9 +40,9 @@ class CompanyTests {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		//company = new CompanyArray();
-		//TODO for HW #10
-		company = new CompanySortedArray(); //for HW #10 
+		company = new CompanyArray();
+	
+		//company = new CompanySortedArray(); 
 		for (int i = 0; i < employees.length; i++) {
 			company.addEmployee(employees[i]);
 		}
@@ -113,6 +117,61 @@ class CompanyTests {
 		};
 		assertArrayEquals(expected, company.sortEmployeesBySalary());
 	}
+	
+	@Test
+	void testFindSalesPersons() {
+	
+		Employee[] expected = {empl2};
+		assertArrayEquals(expected, company.findEmployees(new SalesPersonPredicate()));
+	}
+	@Test
+	void testFindEmployeesSalaryRange() {
+		Employee[] expectedGT10000 = {
+				empl1
+		};
+		Employee[] expected20000_30000 = {
+				
+		};
+		Employee[] expected1000_1500 = {
+				empl2
+		};
+		assertArrayEquals(expectedGT10000,
+				company.findEmployees(new SalaryRangePredicate(10000, Integer.MAX_VALUE)));
+		assertArrayEquals(expected20000_30000,
+				company.findEmployees(new SalaryRangePredicate(20000, 30000)));
+		assertArrayEquals(expected1000_1500,
+				company.findEmployees(new SalaryRangePredicate(1000, 1500)));
+	}
+	@Test
+	void companyIterableTest() {
+		Employee[] expected = {empl1, empl2, empl3};
+		Employee[] actual = getSortedEmployeesFromIterating(3);
+		assertArrayEquals(expected, actual);
+		
+	}
 
+	private Employee[] getSortedEmployeesFromIterating(int size) {
+		Employee[] res = new Employee[size];
+		int ind = 0;
+		for(Employee empl: company) {
+			res[ind++] = empl;
+		}
+		if (!(company instanceof CompanySortedArray)) {
+			Arrays.sort(res);
+		}
+		return res;
+	}
+	@Test
+	void NoSuchElementTest() {
+		boolean flException = false;
+		ICompany anotherCompany = new CompanyArray();
+		Iterator<Employee> it = anotherCompany.iterator();
+		try {
+			it.next();
+		} catch (NoSuchElementException e) {
+			flException = true;
+		}
+		assertTrue(flException);
+	}
 
 }
